@@ -4,7 +4,7 @@ AIで作ったWebアプリを公開する前の自己点検ツール。無料・
 
 ## 使い方
 
-GitHub Pages の公開URL（準備中）へアクセスするか、`python3 -m http.server 8000` を実行し `http://localhost:8000` を開いてください。ローカルでは `node --test checker.test.mjs` でデータとレポートを検証できます。
+公開URL https://ttostudio.github.io/ai-release-check/ へアクセスするか、`python3 -m http.server 8000` を実行し `http://localhost:8000` を開いてください。ローカルでは `node --test checker.test.mjs` でデータとレポートを検証できます。
 
 ## 注意
 

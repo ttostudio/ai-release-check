@@ -29,7 +29,11 @@ export function summarize(answers) {
 export function report(project, answers, date = new Date().toISOString()) {
   const s = summarize(answers);
   const safe = String(project || '名称未設定').replace(/[\r\n]+/g, ' ').slice(0, 100);
-  const lines = [`# 公開前セルフチェック: ${safe}`, '', `作成日時: ${date}`, `確認済み ${s.counts['確認済み']} / 要対応 ${s.counts['要対応']} / 未確認 ${s.counts['未確認']} / 対象外 ${s.counts['対象外']}`, '', '※ 自己申告の記録です。自動スキャン・安全性の保証・法律判断ではありません。', '※ 要対応/未確認を解消するまで公開可否を慎重に判断してください。', ''];
+  const lines = [`# 公開前セルフチェック: ${safe}`, '', `作成日時: ${date}`, `確認済み ${s.counts['確認済み']} / 要対応 ${s.counts['要対応']} / 未確認 ${s.counts['未確認']} / 対象外 ${s.counts['対象外']}`, '', '※ 自己申告の記録です。自動スキャン・安全性の保証・法律判断ではありません。', '※ 要対応/未確認を解消するまで公開可否を慎重に判断してください。', '', '## 次に確認すること', ''];
+  const pending = checks.filter(c => answers?.[c.id] === '要対応').concat(checks.filter(c => !states.includes(answers?.[c.id]) || answers[c.id] === '未確認'));
+  if (pending.length === 0) lines.push('要対応・未確認の項目はありません。対象外の妥当性と確認済みの根拠を見直してください。', '');
+  for (const check of pending) lines.push(`- [ ] 【${answers?.[check.id] === '要対応' ? '要対応' : '未確認'}】${check.category} / ${check.text}`, `  - 確認の意図: ${check.why}`, '  - 確認方法・実行結果・日付: （あとで記入）', '');
+  lines.push('## 全項目の回答', '');
   for (const check of checks) lines.push(`- [${answers?.[check.id] === '確認済み' ? 'x' : ' '}] ${check.category} / ${check.text} — ${states.includes(answers?.[check.id]) ? answers[check.id] : '未確認'}（${check.why}）`);
   return lines.join('\n') + '\n';
 }

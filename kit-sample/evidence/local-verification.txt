@@ -1,0 +1,68 @@
+実行日時: 2026-09-25 09:03:01 JST
+v22.23.1
+10.9.8
+
+> release-check-kit-sample@0.1.0 test
+> node --test tests/*.test.mjs
+
+TAP version 13
+# Subtest: 有効な時間帯と人数だけを受け付ける
+ok 1 - 有効な時間帯と人数だけを受け付ける
+  ---
+  duration_ms: 0.546875
+  type: 'test'
+  ...
+# Subtest: 画面の制約を回避した人数を拒否する
+ok 2 - 画面の制約を回避した人数を拒否する
+  ---
+  duration_ms: 0.074292
+  type: 'test'
+  ...
+# Subtest: 想定外の時間帯と入力形式を拒否する
+ok 3 - 想定外の時間帯と入力形式を拒否する
+  ---
+  duration_ms: 0.072958
+  type: 'test'
+  ...
+1..3
+# tests 3
+# suites 0
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 39.199333
+
+> release-check-kit-sample@0.1.0 build
+> next build
+
+▲ Next.js 16.3.6 (Turbopack)
+✓ Running next.config took 6ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 234ms
+  Running TypeScript ...
+  Finished TypeScript in 1ms ...
+  Collecting page data using 5 workers ...
+  Generating static pages using 5 workers (0/4) ...
+  Generating static pages using 5 workers (1/4) 
+  Generating static pages using 5 workers (2/4) 
+  Generating static pages using 5 workers (3/4) 
+✓ Generating static pages using 5 workers (4/4) in 207ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+└ ƒ /api/reservation
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+GET /: 200 日本語画面あり
+POST /api/reservation {"slot":"午前","people":2}: 200 {"message":"午前・2人の入力を確認しました（予約は確定していません）"}
+POST /api/reservation {"slot":"午前","people":5}: 400 {"error":"人数は1〜4人で指定してください"}
+POST /api/reservation {"slot":"夜","people":2}: 400 {"error":"時間帯を選択してください"}
+不正なJSON: 400

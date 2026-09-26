@@ -13,9 +13,12 @@ npm run build
 npm run start -- --port 3197
 # 別の端末から
 node tests/http-smoke.mjs
+npm run test:browser
 ```
 
 画面は http://127.0.0.1:3197/ 。人数を 5 に書き換えた API 直接送信でも HTTP 400 となることを確認します。`tests/http-smoke.mjs` は起動済みの本番ビルドに対する試験です。
+
+ブラウザ試験は Playwright とローカルの Google Chrome を使用します。Chrome がない環境では `npx playwright install chromium` のあと `PLAYWRIGHT_CHANNEL=chromium npm run test:browser` を実行してください。実行時に `evidence/browser/` に初期・成功・通信失敗の実画面キャプチャを保存します。通信失敗はその API リクエストだけを遮断し、再試行できるか確認します。画像はデモ入力だけで取得し、実データや個人情報を含めないでください。
 
 ## この教材で学べる範囲
 
@@ -35,3 +38,9 @@ node tests/http-smoke.mjs
 - HTTP異常系のステータス／結果：
 - 未検証項目／理由：
 - 修正と再試験の履歴：
+
+## 失敗から修正までの練習
+
+1. 仮に API 側で人数の上限確認を外した場合、ブラウザの `max=4` があっても API に直接 `people:5` を送れば受け付けられてしまいます。実サービスのデータでは試さないでください。
+2. この教材では `lib/validate.mjs` のサーバー側判定を残し、`tests/validate.test.mjs` と `tests/http-smoke.mjs` と `tests/browser-flow.mjs` がその拒否を確認します。テストを無効化して緑にしないでください。
+3. 修正の前後で「入力／期待するHTTPステータス／実際の結果／実行日時／未検証範囲」を証跡欄に記録します。サンプル自体は修正済みの状態です。修正前の実行ログを再現したと主張していません。
